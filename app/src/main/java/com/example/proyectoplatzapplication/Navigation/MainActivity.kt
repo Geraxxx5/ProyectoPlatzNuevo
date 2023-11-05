@@ -45,6 +45,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.proyectoplatzapplication.ui.ExpenseReport.ReporteGastos
+import com.example.proyectoplatzapplication.ui.Home.Home
 import com.example.proyectoplatzapplication.ui.Reminders.Reminders
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 import kotlinx.coroutines.launch
@@ -137,9 +138,12 @@ fun DrawerExample(){
                     startDestination = "Home"
                 ){
                     composable(route = "Home"){
-                        ReporteGastos(navController = navController)
+                        Home(navController = navController)
                     }
                     composable(route = "Reportes"){
+                        ReporteGastos(navController = navController)
+                    }
+                    composable(route = "Recordatorios"){
                         Reminders(navController = navController)
                     }
                 }
