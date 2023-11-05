@@ -1,4 +1,4 @@
-package com.example.myapplication.calculadora
+package com.example.proyectoplatzapplication.calculadora
 
 sealed class CalculadoraA{
     data class Number(val number: Int): CalculadoraA()

@@ -1,5 +1,5 @@
-package com.example.myapplication.calculadora
 
+package com.example.proyectoplatzapplication.calculadora
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue

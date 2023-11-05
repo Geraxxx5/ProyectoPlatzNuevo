@@ -1,4 +1,4 @@
-package com.example.myapplication.calculadora
+package com.example.proyectoplatzapplication.calculadora
 
 data class CalculadoraS(
     val num1: String = "",

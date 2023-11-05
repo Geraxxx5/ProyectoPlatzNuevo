@@ -1,4 +1,4 @@
-package com.example.myapplication.calculadora
+package com.example.proyectoplatzapplication.calculadora
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
