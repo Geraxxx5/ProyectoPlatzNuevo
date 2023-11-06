@@ -54,7 +54,8 @@ import com.example.proyectoplatzapplication.R
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginScreenViewModel = viewModel()
+    viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
 ) {
     val showLoginForm = rememberSaveable {
         mutableStateOf(true)
@@ -75,8 +76,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = false) { email, password ->
                     Log.d("Finanzas Personales", "Login con $email y $password")
                     viewModel.signInWithEmailAndPassword(email, password) {
-                        //navController.navigate("MainActivity")
-
+                        navController.navigate("MainActivity")
                     }
                 }
             } else {
@@ -84,12 +84,12 @@ fun LoginScreen(
                 UserForm(isCreateAccount = true) { email, password ->
                     Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
                     viewModel.createUserWithEmailAndPassword(email, password) {
-                      //  navController.navigate(MainLogin())
-                        
-
+                        navController.navigate("MainActivity")
                     }
                 }
             }
+
+
 
             Spacer(modifier = Modifier.height(50.dp))
 
@@ -172,7 +172,9 @@ fun PasswordInput(passwordState: MutableState<String>, labelId: String, password
         label = { Text(text = labelId) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+            .fillMaxWidth(),
         visualTransformation = visualTransformation,
         trailingIcon = {
             if (passwordState.value.isNotBlank()) {
@@ -208,7 +210,9 @@ fun InputField(valueState: MutableState<String>, labelId: String, isSingleLine: 
         onValueChange = { valueState.value = it },
         label = { Text(text = labelId) },
         singleLine = isSingleLine,
-        modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
+            .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
