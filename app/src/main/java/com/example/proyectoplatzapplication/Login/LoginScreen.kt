@@ -76,7 +76,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = false) { email, password ->
                     Log.d("Finanzas Personales", "Login con $email y $password")
                     viewModel.signInWithEmailAndPassword(email, password) {
-                        navController.navigate("MainActivity")
+                        navController.navigate(Navigation/MainActivity)
                     }
                 }
             } else {
@@ -84,7 +84,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = true) { email, password ->
                     Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
                     viewModel.createUserWithEmailAndPassword(email, password) {
-                        navController.navigate("MainActivity")
+                        navController.navigate(Navigation/MainActivity)
                     }
                 }
             }
