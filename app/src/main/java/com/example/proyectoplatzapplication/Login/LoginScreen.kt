@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.proyectoplatzapplication.Navigation.MainActivity
 import com.example.proyectoplatzapplication.R
 
 
@@ -74,7 +75,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = false) { email, password ->
                     Log.d("Finanzas Personales", "Login con $email y $password")
                     viewModel.signInWithEmailAndPassword(email, password) {
-                        navController.navigate("ui/Home/Home")
+                        navController.navigate("MainActivity")
                     }
                 }
             } else {
@@ -82,7 +83,8 @@ fun LoginScreen(
                 UserForm(isCreateAccount = true) { email, password ->
                     Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
                     viewModel.createUserWithEmailAndPassword(email, password) {
-                        navController.navigate("ui/Home/Home")
+                        navController.navigate("MainActivity")
+
                     }
                 }
             }
