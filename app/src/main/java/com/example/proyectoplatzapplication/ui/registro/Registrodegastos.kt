@@ -39,7 +39,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
-import com.google.android.material.snackbar.Snackbar
 import com.google.api.Context
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
