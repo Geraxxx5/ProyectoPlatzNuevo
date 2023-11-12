@@ -51,6 +51,7 @@ import java.util.Locale
 
 
 
+
 data class Gasto(
     val fecha: String,
     val categoria: String,
@@ -70,11 +71,6 @@ class RegistroDeGastos : ComponentActivity() {
 @Composable
 fun CrearPantallaRegistro() {
     val gastos = remember { mutableStateListOf<Gasto>() }
-    val fechaSeleccionada = remember { mutableStateOf("") }
-    var categoriaSeleccionada by remember { mutableStateOf("Uso Personal") }
-    val descripcion = remember { mutableStateOf("") }
-    val cantidadGastada = remember { mutableStateOf("") }
-    var snackbarVisible by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -102,42 +98,28 @@ fun CrearPantallaRegistro() {
                 }
             }
         }
-
-        CustomDatePicker(selectedDate = fechaSeleccionada)
-
-        DropdownMenu(
-            expanded = false,
-            onDismissRequest = { },
-            modifier = Modifier.padding(vertical = 16.dp)
-        ) {
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Comida" }) {
-                Text("Comida")
-            }
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Deudas" }) {
-                Text("Deudas")
-            }
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Emergencia" }) {
-                Text("Emergencia")
-            }
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Uso Personal" }) {
-                Text("Uso Personal")
-            }
+        Row(verticalAlignment = Alignment.CenterVertically){
+            Text(
+                text = "Fecha",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Categoría",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Descripción",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Gasto",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(1f)
+            )
         }
-
-        TextField(
-            value = descripcion.value,
-            onValueChange = { descripcion.value = it },
-            label = { Text(text = "Descripción/Uso") },
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
-
-        TextField(
-            value = cantidadGastada.value,
-            onValueChange = { cantidadGastada.value = it },
-            label = { Text(text = "Gasto") },
-            modifier = Modifier.padding(vertical = 16.dp),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
 
         LazyColumn {
             items(gastos) { gasto ->
@@ -156,39 +138,97 @@ fun CrearPantallaRegistro() {
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        if (snackbarVisible) {
-            Snackbar(
-                modifier = Modifier.padding(vertical = 16.dp)
-            ) {
-                Text("Gasto agregado correctamente")
-            }
-            LaunchedEffect(snackbarVisible) {
-                delay(2000)
-                snackbarVisible = false
-            }
+        if (showDialog) {
+            AgregarGastoDialog(
+                gastos = gastos,
+                onDismiss = { showDialog = false },
+                onAgregarGasto = {
+                    gastos.add(
+                        Gasto(
+                            fecha = it.fecha,
+                            categoria = it.categoria,
+                            descripcion = it.descripcion,
+                            cantidadGastada = it.cantidadGastada
+                        )
+                    )
+                    showDialog = false
+                }
+            )
         }
     }
+}
 
-    if (showDialog) {
-        AgregarGastoDialog(
-            fechaSeleccionada = fechaSeleccionada,
-            categoriaSeleccionada = categoriaSeleccionada,
-            descripcion = descripcion,
-            cantidadGastada = cantidadGastada,
-            onDismiss = { showDialog = false },
-            onAgregarGasto = {
-                gastos.add(
-                    Gasto(
-                        fecha = fechaSeleccionada.value,
-                        categoria = categoriaSeleccionada,
-                        descripcion = descripcion.value,
-                        cantidadGastada = cantidadGastada.value
+@Composable
+fun AgregarGastoDialog(
+    gastos: List<Gasto>,
+    onDismiss: () -> Unit,
+    onAgregarGasto: (Gasto) -> Unit
+) {
+    val fechaSeleccionada = remember { mutableStateOf("") }
+    var categoriaSeleccionada by remember { mutableStateOf("Uso Personal") }
+    val descripcion = remember { mutableStateOf("") }
+    val cantidadGastada = remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Agregar gasto") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onAgregarGasto(
+                        Gasto(
+                            fecha = fechaSeleccionada.value,
+                            categoria = categoriaSeleccionada,
+                            descripcion = descripcion.value,
+                            cantidadGastada = cantidadGastada.value
+                        )
                     )
-                )
-                snackbarVisible = true
+                    onDismiss()
+                }
+            ) {
+                Text(text = "Agregar")
             }
-        )
-    }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss
+            ) {
+                Text(text = "Cancelar")
+            }
+        },
+        text = {
+            Column {
+                CustomDatePicker(selectedDate = fechaSeleccionada)
+
+                DropdownMenu(
+                    expanded = false,
+                    onDismissRequest = { },
+                    modifier = Modifier.padding(vertical = 16.dp)
+                ) {
+                    listOf("Comida", "Deudas", "Emergencia", "Uso Personal").forEach { categoria ->
+                        DropdownMenuItem(onClick = { categoriaSeleccionada = categoria }) {
+                            Text(categoria)
+                        }
+                    }
+                }
+
+                TextField(
+                    value = descripcion.value,
+                    onValueChange = { descripcion.value = it },
+                    label = { Text(text = "Descripción/Uso") },
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+
+                TextField(
+                    value = cantidadGastada.value,
+                    onValueChange = { cantidadGastada.value = it },
+                    label = { Text(text = "Gasto") },
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
+        }
+    )
 }
 
 @Composable
@@ -223,77 +263,6 @@ fun CustomDatePicker(selectedDate: MutableState<String>) {
     ) {
         Text(text = "Seleccionar fecha")
     }
-}
-
-@Composable
-fun AgregarGastoDialog(
-    fechaSeleccionada: MutableState<String>,
-    categoriaSeleccionada: String,
-    descripcion: MutableState<String>,
-    cantidadGastada: MutableState<String>,
-    onDismiss: () -> Unit,
-    onAgregarGasto: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "Agregar gasto") },
-        confirmButton = {
-            Button(
-                onClick = {
-                    onAgregarGasto()
-                    onDismiss()
-                }
-            ) {
-                Text(text = "Agregar")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss
-            ) {
-                Text(text = "Cancelar")
-            }
-        },
-        text = {
-            Column {
-                CustomDatePicker(selectedDate = fechaSeleccionada)
-
-                DropdownMenu(
-                    expanded = false,
-                    onDismissRequest = { },
-                    modifier = Modifier.padding(vertical = 16.dp)
-                ) {
-                    DropdownMenuItem(onClick = { /* Handle category selection */ }) {
-                        Text("Comida")
-                    }
-                    DropdownMenuItem(onClick = { /* Handle category selection */ }) {
-                        Text("Deudas")
-                    }
-                    DropdownMenuItem(onClick = { /* Handle category selection */ }) {
-                        Text("Emergencia")
-                    }
-                    DropdownMenuItem(onClick = { /* Handle category selection */ }) {
-                        Text("Uso Personal")
-                    }
-                }
-
-                TextField(
-                    value = descripcion.value,
-                    onValueChange = { descripcion.value = it },
-                    label = { Text(text = "Descripción/Uso") },
-                    modifier = Modifier.padding(vertical = 16.dp)
-                )
-
-                TextField(
-                    value = cantidadGastada.value,
-                    onValueChange = { cantidadGastada.value = it },
-                    label = { Text(text = "Gasto") },
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-            }
-        }
-    )
 }
 
 fun calcularTotalGastado(gastos: List<Gasto>): Double {
