@@ -1,4 +1,4 @@
-package com.example.proyectoplatzapplication.calculadora
+package com.example.proyectoplatzapplication.ui.calculadora
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

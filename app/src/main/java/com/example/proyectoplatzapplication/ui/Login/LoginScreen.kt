@@ -1,10 +1,6 @@
-package com.example.proyectoplatzapplication.Login
+package com.example.proyectoplatzapplication.ui.Login
 
-import android.annotation.SuppressLint
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,15 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.example.proyectoplatzapplication.Navigation.MainActivity
 import com.example.proyectoplatzapplication.R
 
 
@@ -76,7 +68,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = false) { email, password ->
                     Log.d("Finanzas Personales", "Login con $email y $password")
                     viewModel.signInWithEmailAndPassword(email, password) {
-                        navController.navigate(Navigation/MainActivity)
+                       // navController.navigate(Navigation/MainActivity)
                     }
                 }
             } else {
@@ -84,7 +76,7 @@ fun LoginScreen(
                 UserForm(isCreateAccount = true) { email, password ->
                     Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
                     viewModel.createUserWithEmailAndPassword(email, password) {
-                        navController.navigate(Navigation/MainActivity)
+                      // navController.navigate(Navigation/MainActivity)
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.proyectoplatzapplication.calculadora
+package com.example.proyectoplatzapplication.ui.calculadora
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.proyectoplatzapplication.ui.calculadora.Operacionescal
 
 @Composable
 fun Calculadora2(

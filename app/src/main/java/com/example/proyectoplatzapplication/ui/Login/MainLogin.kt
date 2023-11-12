@@ -1,12 +1,11 @@
-package com.example.proyectoplatzapplication.Login
+package com.example.proyectoplatzapplication.ui.Login
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.proyectoplatzapplication.ui.Login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

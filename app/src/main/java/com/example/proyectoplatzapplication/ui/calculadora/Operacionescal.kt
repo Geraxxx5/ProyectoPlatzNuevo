@@ -1,4 +1,4 @@
-package com.example.proyectoplatzapplication.calculadora
+package com.example.proyectoplatzapplication.ui.calculadora
 
 sealed class Operacionescal(val symbol: String){
     object Suma: Operacionescal("+")

@@ -1,4 +1,4 @@
-package com.example.proyectoplatzapplication.Login
+package com.example.proyectoplatzapplication.ui.Login
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

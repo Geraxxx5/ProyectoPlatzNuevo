@@ -1,4 +1,4 @@
-package com.example.proyectoplatzapplication.calculadora
+package com.example.proyectoplatzapplication.ui.calculadora
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
