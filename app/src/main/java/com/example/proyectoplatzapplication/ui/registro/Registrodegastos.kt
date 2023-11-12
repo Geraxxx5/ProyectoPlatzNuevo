@@ -77,20 +77,30 @@ fun CrearPantallaRegistro() {
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "REGISTRO DE GASTOS",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(16.dp)
-        )
-        Icon(
-            imageVector = Icons.Default.Add,
-            contentDescription = "Agregar gasto",
-            modifier = Modifier
-                .padding(16.dp)
-                .clickable {
-                    snackbarVisible = true
-                }
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "REGISTRO DE GASTOS",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(end = 16.dp) // Agrega espacio de padding en la parte derecha
+                    .padding(16.dp) // Agrega espacio de padding alrededor del título
+            )
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Agregar gasto",
+                modifier = Modifier
+                    .padding(1.dp)
+
+                    .clickable {
+                        snackbarVisible = true
+                    }
+            )
+        }
+
 
         CustomDatePicker(selectedDate = fechaSeleccionada, modifier = Modifier.padding(16.dp))
 
@@ -112,9 +122,6 @@ fun CrearPantallaRegistro() {
                 Text("Uso Personal")
             }
         }
-
-
-
 
         TextField(
             value = descripcion.value,
