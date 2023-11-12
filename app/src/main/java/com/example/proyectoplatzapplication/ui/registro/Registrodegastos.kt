@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,8 +15,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-
-import androidx.compose.material3.*
+import android.app.DatePickerDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +44,7 @@ import com.google.api.Context
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 
 class RegistroDeGastos : ComponentActivity() {
@@ -56,7 +69,7 @@ class RegistroDeGastos : ComponentActivity() {
 fun CrearPantallaRegistro() {
     val gastos = mutableStateListOf<Gasto>()
     val fechaSeleccionada = mutableStateOf("")
-    val categoriaSeleccionada = remember { mutableStateOf("Uso Personal") }
+    var categoriaSeleccionada = remember { mutableStateOf("Uso Personal") }
     val descripcion = mutableStateOf("")
     val cantidadGastada = mutableStateOf("")
     var snackbarVisible by remember { mutableStateOf(false) }
@@ -87,20 +100,17 @@ fun CrearPantallaRegistro() {
             onDismissRequest = { },
             modifier = Modifier.padding(16.dp)
         ) {
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Uso Personal" }) {
-                Text("Uso Personal")
-            }
-
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Comida" }) {
+            androidx.compose.material.DropdownMenuItem(onClick = { categoriaSeleccionada = mutableStateOf("Comida") }) {
                 Text("Comida")
             }
-
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Deudas" }) {
+            androidx.compose.material.DropdownMenuItem(onClick = { categoriaSeleccionada = mutableStateOf("Deudas") }) {
                 Text("Deudas")
             }
-
-            DropdownMenuItem(onClick = { categoriaSeleccionada = "Emergencia" }) {
+            androidx.compose.material.DropdownMenuItem(onClick = { categoriaSeleccionada = mutableStateOf("Emergencia") }) {
                 Text("Emergencia")
+            }
+            androidx.compose.material.DropdownMenuItem(onClick = { categoriaSeleccionada = mutableStateOf("Uso Personal") }) {
+                Text("Uso Personal")
             }
         }
 
@@ -157,8 +167,7 @@ data class Gasto(
     val fecha: String,
     val categoria: String,
     val descripcion: String,
-    val cantidadGastada: Double
-)
+    val cantidadGastada: String)
 
 fun calcularTotalGastado(gastos: List<Gasto>): String {
     var total = 0.0
@@ -170,28 +179,53 @@ fun calcularTotalGastado(gastos: List<Gasto>): String {
     return total.toString()
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomDatePicker(
-    selectedDate: MutableState<String>,
-    modifier: Modifier = Modifier
-) {
-    val context = LocalContext.current
+private operator fun Double.plusAssign(cantidadGastada: String) {
 
-    TextField(
-        value = selectedDate.value,
-        onValueChange = { selectedDate.value = it },
-        label = { Text(text = "Select Date") },
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable {
-                showDatePicker(context, selectedDate)
-            }
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-private fun showDatePicker(context: Context, selectedDate: MutableState<String>) {
+@Composable
+fun CustomDatePicker(selectedDate: MutableState<String>, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+    fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.set(year, month, dayOfMonth)
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                selectedDate.value = dateFormat.format(selectedCalendar.time)
+            },
+            year,
+            month,
+            day
+        )
+
+        datePickerDialog.show()
+    }
+
+    OutlinedButton(
+        onClick = {
+            showDatePicker()
+        },
+        modifier = modifier
+    ) {
+        Text(text = "Select Date")
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun showDatePicker(selectedDate: MutableState<String>) {
+    val context = LocalContext.current
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
@@ -213,8 +247,9 @@ private fun showDatePicker(context: Context, selectedDate: MutableState<String>)
     datePickerDialog.show()
 }
 
-@Composable
-fun Snackbar(
+
+/*@Composable
+fun CustomSnackbar(
     modifier: Modifier = Modifier,
     content: @Composable (Snackbar.SnackbarLayout) -> Unit
 ) {
@@ -231,7 +266,7 @@ fun Snackbar(
         hostState = host,
         snackbar = content
     )
-}
+}*/
 
 @Preview
 @Composable
