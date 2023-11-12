@@ -108,7 +108,9 @@ dependencies {
     implementation ("androidx.hilt:hilt-navigation-compose:1.1.0")
     //Google auth dependency
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
-    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("com.google.android.material:material:1.10.0")
+    implementation ("androidx.compose.material:material:1.5.4")
+
 
 
 }

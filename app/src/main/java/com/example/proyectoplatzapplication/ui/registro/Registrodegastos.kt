@@ -27,7 +27,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
+import com.google.android.material.snackbar.Snackbar
+import com.google.api.Context
 import kotlinx.coroutines.delay
+import java.text.SimpleDateFormat
+import java.util.Calendar
+
 
 class RegistroDeGastos : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +56,7 @@ class RegistroDeGastos : ComponentActivity() {
 fun CrearPantallaRegistro() {
     val gastos = mutableStateListOf<Gasto>()
     val fechaSeleccionada = mutableStateOf("")
-    val categoriaSeleccionada = mutableStateOf("")
+    val categoriaSeleccionada = remember { mutableStateOf("Uso Personal") }
     val descripcion = mutableStateOf("")
     val cantidadGastada = mutableStateOf("")
     var snackbarVisible by remember { mutableStateOf(false) }
@@ -82,19 +87,24 @@ fun CrearPantallaRegistro() {
             onDismissRequest = { },
             modifier = Modifier.padding(16.dp)
         ) {
-            DropdownMenuItem(onClick = { categoriaSeleccionada.value = "Uso Personal" }) {
-                Text(text = "Uso Personal")
+            DropdownMenuItem(onClick = { categoriaSeleccionada = "Uso Personal" }) {
+                Text("Uso Personal")
             }
-            DropdownMenuItem(onClick = { categoriaSeleccionada.value = "Comida" }) {
-                Text(text = "Comida")
+
+            DropdownMenuItem(onClick = { categoriaSeleccionada = "Comida" }) {
+                Text("Comida")
             }
-            DropdownMenuItem(onClick = { categoriaSeleccionada.value = "Deudas" }) {
-                Text(text = "Deudas")
+
+            DropdownMenuItem(onClick = { categoriaSeleccionada = "Deudas" }) {
+                Text("Deudas")
             }
-            DropdownMenuItem(onClick = { categoriaSeleccionada.value = "Emergencia" }) {
-                Text(text = "Emergencia")
+
+            DropdownMenuItem(onClick = { categoriaSeleccionada = "Emergencia" }) {
+                Text("Emergencia")
             }
         }
+
+
 
 
         TextField(
@@ -108,7 +118,8 @@ fun CrearPantallaRegistro() {
             value = cantidadGastada.value,
             onValueChange = { cantidadGastada.value = it },
             label = { Text(text = "Gasto") },
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
 
         LazyColumn {
@@ -123,7 +134,7 @@ fun CrearPantallaRegistro() {
         }
 
         Text(
-            text = "Total gastado: ${calcularTotalGastado()}",
+            text = "Total gastado: ${calcularTotalGastado(gastos)}",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )
@@ -146,14 +157,14 @@ data class Gasto(
     val fecha: String,
     val categoria: String,
     val descripcion: String,
-    val cantidadGastada: String
+    val cantidadGastada: Double
 )
 
-fun calcularTotalGastado(): String {
+fun calcularTotalGastado(gastos: List<Gasto>): String {
     var total = 0.0
 
     for (gasto in gastos) {
-        total += gasto.cantidadGastada.toDouble()
+        total += gasto.cantidadGastada
     }
 
     return total.toString()
@@ -165,66 +176,60 @@ fun CustomDatePicker(
     selectedDate: MutableState<String>,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    Box(modifier = modifier) {
-        OutlinedTextField(
-            value = selectedDate.value,
-            onValueChange = { selectedDate.value = it },
-            label = { Text(text = "Select Date") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = true }
-        )
+    TextField(
+        value = selectedDate.value,
+        onValueChange = { selectedDate.value = it },
+        label = { Text(text = "Select Date") },
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                showDatePicker(context, selectedDate)
+            }
+    )
+}
 
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-        ) {
-            DatePicker(
-                context = context,
-                onDateSelected = { date ->
-                    selectedDate.value = date.toString()
-                    expanded = false
-                }
-            )
-        }
-    }
+@OptIn(ExperimentalMaterial3Api::class)
+private fun showDatePicker(context: Context, selectedDate: MutableState<String>) {
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            val selectedCalendar = Calendar.getInstance()
+            selectedCalendar.set(year, month, dayOfMonth)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            selectedDate.value = dateFormat.format(selectedCalendar.time)
+        },
+        year,
+        month,
+        day
+    )
+
+    datePickerDialog.show()
 }
 
 @Composable
 fun Snackbar(
     modifier: Modifier = Modifier,
-    content: @Composable (SnackbarLayout) -> Unit
+    content: @Composable (Snackbar.SnackbarLayout) -> Unit
 ) {
     val host = rememberSnackbarHostState()
 
     LaunchedEffect(host) {
         host.showSnackbar(
-            message = "Snackbar message",
+            message = "",
             actionLabel = "Dismiss"
         )
     }
 
     SnackbarHost(
         hostState = host,
-        snackbar = { snackbarData ->
-            SnackbarLayout(
-                modifier = modifier,
-                snackbarData = snackbarData,
-                action = {
-                    Button(
-                        onClick = { host.currentSnackbarData?.performAction() },
-                    ) {
-                        Text(snackbarData.actionLabel!!)
-                    }
-                }
-            )
-        }
+        snackbar = content
     )
 }
 
