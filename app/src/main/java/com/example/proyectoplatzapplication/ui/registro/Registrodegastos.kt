@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import android.app.DatePickerDialog
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -215,14 +216,14 @@ fun AgregarGastoDialog(
                         )
                     )
                     onDismiss()
-                }
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))
             ) {
                 Text(text = "Agregar")
             }
         },
         dismissButton = {
             Button(
-                onClick = onDismiss
+                onClick = onDismiss,  colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))
             ) {
                 Text(text = "Cancelar")
             }
@@ -232,7 +233,7 @@ fun AgregarGastoDialog(
                 CustomDatePicker(selectedDate = fechaSeleccionada)
 
                 Button(
-                    onClick = { isDropdownMenuVisible = true }
+                    onClick = { isDropdownMenuVisible = true }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))
                 ) {
                     Text(text = "Categoría: ${categoriaSeleccionada.value}")
                 }
@@ -300,7 +301,7 @@ fun CustomDatePicker(selectedDate: MutableState<String>) {
 
     Button(
         onClick = { showDatePicker() },
-        modifier = Modifier.padding(vertical = 16.dp)
+        modifier = Modifier.padding(vertical = 16.dp), colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))
     ) {
         Text(text = "Seleccionar fecha")
     }
