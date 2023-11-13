@@ -19,12 +19,14 @@ import android.app.DatePickerDialog
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
@@ -37,18 +39,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 import com.google.api.Context
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-
 
 
 
@@ -68,6 +75,7 @@ class RegistroDeGastos : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CrearPantallaRegistro() {
     val gastos = remember { mutableStateListOf<Gasto>() }
@@ -81,9 +89,12 @@ fun CrearPantallaRegistro() {
         ) {
             Text(
                 text = "REGISTRO DE GASTOS",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.weight(1f)
-            )
+                modifier = Modifier.weight(2f),
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF12950E),fontFamily = FontFamily.SansSerif,fontSize = 25.sp
+
+                ))
             Box(
                 modifier = Modifier.size(48.dp),
                 contentAlignment = Alignment.Center
@@ -92,31 +103,45 @@ fun CrearPantallaRegistro() {
                     onClick = { showDialog = true }
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Agregar gasto"
+                        painter = painterResource(id = R.drawable.addddd),
+                        contentDescription = "Agregar registro",
+                        modifier = Modifier
+                            .size(45.dp),
+                        tint = Color.Unspecified
                     )
                 }
             }
         }
-        Row(verticalAlignment = Alignment.CenterVertically){
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = "Fecha",
-                style = MaterialTheme.typography.bodySmall,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,fontFamily = FontFamily.SansSerif,fontSize = 16.sp),
                 modifier = Modifier.weight(1f)
             )
+
             Text(
                 text = "Categoría",
-                style = MaterialTheme.typography.bodySmall,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,fontFamily = FontFamily.SansSerif,fontSize = 16.sp),
                 modifier = Modifier.weight(1f)
             )
             Text(
                 text = "Descripción",
-                style = MaterialTheme.typography.bodySmall,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,fontFamily = FontFamily.SansSerif,fontSize = 16.sp),
                 modifier = Modifier.weight(1f)
             )
             Text(
                 text = "Gasto",
-                style = MaterialTheme.typography.bodySmall,
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,fontFamily = FontFamily.SansSerif,fontSize = 16.sp),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -131,12 +156,15 @@ fun CrearPantallaRegistro() {
                 }
             }
         }
-
+    Box(modifier =Modifier.fillMaxWidth().background(Color(0xFFD2FEA8))){
         Text(
             text = "Total gastado Q: ${calcularTotalGastado(gastos)}",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(vertical = 16.dp)
-        )
+            modifier = Modifier.padding(vertical = 16.dp),
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,fontFamily = FontFamily.SansSerif,fontSize = 20.sp)
+
+            )}
 
         if (showDialog) {
             AgregarGastoDialog(
@@ -158,6 +186,7 @@ fun CrearPantallaRegistro() {
     }
 }
 
+
 @Composable
 fun AgregarGastoDialog(
     gastos: List<Gasto>,
@@ -165,9 +194,11 @@ fun AgregarGastoDialog(
     onAgregarGasto: (Gasto) -> Unit
 ) {
     val fechaSeleccionada = remember { mutableStateOf("") }
-    var categoriaSeleccionada by remember { mutableStateOf("Uso Personal") }
+    val categoriaSeleccionada = remember { mutableStateOf("Uso Personal") }
     val descripcion = remember { mutableStateOf("") }
     val cantidadGastada = remember { mutableStateOf("") }
+    val categorias = listOf("Comida", "Deudas", "Emergencia", "Uso Personal")
+    var isDropdownMenuVisible by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -178,7 +209,7 @@ fun AgregarGastoDialog(
                     onAgregarGasto(
                         Gasto(
                             fecha = fechaSeleccionada.value,
-                            categoria = categoriaSeleccionada,
+                            categoria = categoriaSeleccionada.value,
                             descripcion = descripcion.value,
                             cantidadGastada = cantidadGastada.value
                         )
@@ -200,13 +231,22 @@ fun AgregarGastoDialog(
             Column {
                 CustomDatePicker(selectedDate = fechaSeleccionada)
 
+                Button(
+                    onClick = { isDropdownMenuVisible = true }
+                ) {
+                    Text(text = "Categoría: ${categoriaSeleccionada.value}")
+                }
+
                 DropdownMenu(
-                    expanded = false,
-                    onDismissRequest = { },
+                    expanded = isDropdownMenuVisible,
+                    onDismissRequest = { isDropdownMenuVisible = false },
                     modifier = Modifier.padding(vertical = 16.dp)
                 ) {
-                    listOf("Comida", "Deudas", "Emergencia", "Uso Personal").forEach { categoria ->
-                        DropdownMenuItem(onClick = { categoriaSeleccionada = categoria }) {
+                    categorias.forEach { categoria ->
+                        DropdownMenuItem(onClick = {
+                            categoriaSeleccionada.value = categoria
+                            isDropdownMenuVisible = false
+                        }) {
                             Text(categoria)
                         }
                     }
@@ -230,6 +270,7 @@ fun AgregarGastoDialog(
         }
     )
 }
+
 
 @Composable
 fun CustomDatePicker(selectedDate: MutableState<String>) {
@@ -274,7 +315,6 @@ fun calcularTotalGastado(gastos: List<Gasto>): Double {
 
     return total
 }
-
 @Preview
 @Composable
 fun PreviewPantallaRegistro() {
