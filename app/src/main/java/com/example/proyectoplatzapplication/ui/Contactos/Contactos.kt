@@ -142,6 +142,7 @@ fun ContactoItem(contacto: Contacto) {
         intent.putExtra("Contacto",contacto)
         context.startActivity(intent)
     },
+
         Modifier
             .fillMaxWidth()
             .padding(16.dp)
