@@ -72,22 +72,22 @@ fun MyComponent(messages: MyMessages, onClick: () -> Unit) {
             .background(MaterialTheme.colorScheme.background)
             .padding(8.dp)
     ) {
-        MyImage()
+        //MyImage()
         MyTexts(messages)
     }
 }
 
-@Composable
-fun MyImage() {
-    Image(
-        painterResource(R.drawable.ic_launcher_foreground),
-        "Mi imagen de prueba",
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.primary)
-            .size(64.dp)
-    )
-}
+//@Composable
+//fun MyImage() {
+    //Image(
+      //  painterResource(R.drawable.ic_launcher_foreground),
+        //"Mi imagen de prueba",
+        //modifier = Modifier
+          //  .clip(CircleShape)
+            //.background(MaterialTheme.colorScheme.primary)
+            //.size(64.dp)
+    //)
+//}
 
 @Composable
 fun MyTexts(messages: MyMessages) {
