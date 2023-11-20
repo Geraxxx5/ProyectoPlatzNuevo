@@ -1,4 +1,4 @@
-package com.example.prueba
+package Contactos
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.prueba.ui.theme.PruebaTheme
+import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PruebaTheme {
+            ProyectoPlatzApplicationTheme {
                 val navController = rememberNavController()
                 NavHost(navController, startDestination = "contact_list") {
                     composable("contact_list") {
@@ -132,7 +132,7 @@ fun ContactDetail(contact: MyMessages) {
 @Preview(showSystemUi = true)
 @Composable
 fun PreviewComponent(){
-    PruebaTheme {
+    ProyectoPlatzApplicationTheme {
         MyMessages(rememberNavController(), message)
     }
 }
