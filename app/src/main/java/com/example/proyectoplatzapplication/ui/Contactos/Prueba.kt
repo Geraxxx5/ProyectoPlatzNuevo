@@ -77,18 +77,6 @@ fun MyComponent(messages: MyMessages, onClick: () -> Unit) {
     }
 }
 
-//@Composable
-//fun MyImage() {
-    //Image(
-      //  painterResource(R.drawable.ic_launcher_foreground),
-        //"Mi imagen de prueba",
-        //modifier = Modifier
-          //  .clip(CircleShape)
-            //.background(MaterialTheme.colorScheme.primary)
-            //.size(64.dp)
-    //)
-//}
-
 @Composable
 fun MyTexts(messages: MyMessages) {
     Column(modifier = Modifier.padding(start = 8.dp)) {
