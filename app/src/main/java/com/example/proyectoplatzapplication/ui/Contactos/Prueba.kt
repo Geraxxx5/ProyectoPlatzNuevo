@@ -1,4 +1,4 @@
-package Contactos
+package com.example.proyectoplatzapplication.ui.Contactos
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

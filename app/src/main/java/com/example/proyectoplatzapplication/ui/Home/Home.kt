@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Card
@@ -26,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,7 +36,7 @@ val menu = listOf(
     listOf("Ahorros", Icons.Filled.MailOutline),
     listOf("Registro de gastos",Icons.Filled.Info),
     listOf("Reportes",Icons.Filled.Face),
-    listOf("Contactos",Icons.Filled.AccountBox)
+    listOf("com/example/proyectoplatzapplication/ui/Contactos",Icons.Filled.AccountBox)
 )
 
 @Composable

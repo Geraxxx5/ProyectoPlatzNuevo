@@ -74,7 +74,7 @@ fun DrawerExample(){
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val routes = listOf("Home", "Reportes", "Recordatorios", "Gastos", "Ahorros", "Contactos", "Calculadora", "Configuraciones")
+    val routes = listOf("Home", "Reportes", "Recordatorios", "Gastos", "Ahorros", "com/example/proyectoplatzapplication/ui/Contactos", "Calculadora", "Configuraciones")
     val selectedRoute = remember { mutableStateOf(routes[0]) }
     var select = listOf(true,false,false,false,false,false,false,false)
     var mutableSelect = select.toMutableList()

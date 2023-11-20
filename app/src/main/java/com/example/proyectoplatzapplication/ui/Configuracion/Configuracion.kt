@@ -1,4 +1,4 @@
-package Configuracion
+package com.example.proyectoplatzapplication.ui.Configuracion
 
 
 import android.os.Bundle
