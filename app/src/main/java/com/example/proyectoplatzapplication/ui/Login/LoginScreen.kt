@@ -1,5 +1,7 @@
 package com.example.proyectoplatzapplication.ui.Login
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -33,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,6 +43,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.proyectoplatzapplication.Navigation.MainActivity
 import com.example.proyectoplatzapplication.R
 
 
@@ -49,70 +53,81 @@ fun LoginScreen(
     viewModel: LoginScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 
 ) {
+    val context = LocalContext.current
+    val activity = (LocalContext.current as? Activity)
     val showLoginForm = rememberSaveable {
         mutableStateOf(true)
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Image(
-                painter = painterResource(R.drawable.applogoplat),
-                contentDescription = null,
-                modifier = Modifier.size(300.dp)
-            )
-
-            if (showLoginForm.value) {
-                Text(text = "Iniciar Sesión")
-                UserForm(isCreateAccount = false) { email, password ->
-                    Log.d("Finanzas Personales", "Login con $email y $password")
-                    viewModel.signInWithEmailAndPassword(email, password) {
-
-                       // navController.navigate(Navigation/MainActivity)
-
-                        navController.navigate("MainActivity")
-
-                    }
-                }
-            } else {
-                Text(text = "Crea una cuenta")
-                UserForm(isCreateAccount = true) { email, password ->
-                    Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
-                    viewModel.createUserWithEmailAndPassword(email, password) {
-
-                      // navController.navigate(Navigation/MainActivity)
-
-                        navController.navigate("MainActivity")
-
-                    }
-                }
-            }
-
-
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+    if(viewModel.verifyUsuer()){
+        context.startActivity(Intent(context, MainActivity::class.java))
+        activity?.finish()
+    }else{
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                val text1 =
-                    if (showLoginForm.value) "¿No tienes cuenta?"
-                    else "¿Ya tienes Cuenta"
-
-                val text2 =
-                    if (showLoginForm.value) "Registrate"
-                    else "Inicia Sesión"
-
-                Text(text = text1)
-                Text(
-                    text = text2,
-                    modifier = Modifier
-                        .clickable { showLoginForm.value = !showLoginForm.value }
-                        .padding(start = 10.dp),
-                    color = Color(0xFF158A13)
+                Image(
+                    painter = painterResource(R.drawable.applogoplat),
+                    contentDescription = null,
+                    modifier = Modifier.size(300.dp)
                 )
+
+                if (showLoginForm.value) {
+                    Text(text = "Iniciar Sesión")
+                    UserForm(isCreateAccount = false) { email, password ->
+                        Log.d("Finanzas Personales", "Login con $email y $password")
+                        viewModel.signInWithEmailAndPassword(email, password) {
+
+                            // navController.navigate(Navigation/MainActivity)
+                            context.startActivity(Intent(context, MainActivity::class.java))
+                            activity?.finish()
+                            //navController.navigate("MainActivity")
+
+                        }
+                    }
+                } else {
+                    Text(text = "Crea una cuenta")
+                    UserForm(isCreateAccount = true) { email, password ->
+                        Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
+                        viewModel.createUserWithEmailAndPassword(email, password) {
+
+                            // navController.navigate(Navigation/MainActivity)
+                            context.startActivity(Intent(context, MainActivity::class.java))
+                            activity?.finish()
+
+                        }
+                    }
+                }
+
+
+
+                Spacer(modifier = Modifier.height(50.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    val text1 =
+                        if (showLoginForm.value) "¿No tienes cuenta?"
+                        else "¿Ya tienes Cuenta"
+
+                    val text2 =
+                        if (showLoginForm.value) "Registrate"
+                        else "Inicia Sesión"
+
+                    Text(text = text1)
+                    Text(
+                        text = text2,
+                        modifier = Modifier
+                            .clickable { showLoginForm.value = !showLoginForm.value }
+                            .padding(start = 10.dp),
+                        color = Color(0xFF158A13)
+                    )
+                }
             }
         }
     }
@@ -216,3 +231,4 @@ fun InputField(valueState: MutableState<String>, labelId: String, isSingleLine: 
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
     )
 }
+

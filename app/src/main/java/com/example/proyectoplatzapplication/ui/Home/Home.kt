@@ -36,7 +36,7 @@ val menu = listOf(
     listOf("Ahorros", Icons.Filled.MailOutline),
     listOf("Registro de gastos",Icons.Filled.Info),
     listOf("Reportes",Icons.Filled.Face),
-    listOf("com/example/proyectoplatzapplication/ui/Contactos",Icons.Filled.AccountBox)
+    listOf("Contactos",Icons.Filled.AccountBox)
 )
 
 @Composable

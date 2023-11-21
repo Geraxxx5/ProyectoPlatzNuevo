@@ -39,21 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.registro.CrearPantallaRegistro
 
-class Ahorritos : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AhorrosScreen()
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AhorrosScreen() {
+fun AhorrosScreen(navController: NavController) {
     var openDialog by remember { mutableStateOf(false) }
     var ahorros by remember { mutableStateOf(listOf<Ahorro>()) }
     var selectedAhorro by remember { mutableStateOf<Ahorro?>(null) }
@@ -248,5 +241,6 @@ data class Ahorro(val objetivo: String, val descripcion: String, val meta: Int, 
 @Preview
 @Composable
 fun PreviewPantallaAhorros() {
-    AhorrosScreen()
+    val navController = rememberNavController()
+    AhorrosScreen(navController)
 }

@@ -18,11 +18,11 @@ class LoginScreenViewModel : ViewModel() {
 
 
     fun signInWithEmailAndPassword(email: String, password: String, MainActivity:() -> Unit)
-    = viewModelScope.launch {
+            = viewModelScope.launch {
         try{
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
-                    task ->
+                        task ->
                     if (task.isSuccessful){
                         Log.d("Finanzas Personales","SignIn exitoso!")
                         MainActivity()
@@ -46,12 +46,12 @@ class LoginScreenViewModel : ViewModel() {
             _loading.value = true
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener{
-                    task ->
+                        task ->
                     if (task.isSuccessful){
                         val displayName =
                             task.result.user?.email?.split("@")?.get(0)
-                        createUser(displayName)
-                       MainActivity()
+                        createUser(displayName, email)
+                        MainActivity()
                     }
                     else{
                         Log.d("Finanzas Personales", "CreateUserWithEmailAndPassword: ${task.result.toString()}")
@@ -63,17 +63,25 @@ class LoginScreenViewModel : ViewModel() {
 
     }
 
-    private fun createUser(displayName: String?) {
-val userId = auth.currentUser?.uid
+    fun verifyUsuer():Boolean{
+        val user = auth.currentUser
+        if(user != null){
+            return true
+        }
+        return false
+    }
+    private fun createUser(displayName: String?, email: String?) {
+        val userId = auth.currentUser?.uid
         val user = mutableMapOf<String, Any> ()
         user["user_id"] = userId.toString()
         user["display_name"] = displayName.toString()
-     FirebaseFirestore.getInstance().collection("users")
-         .add(user)
-         .addOnSuccessListener {
-             Log.d("Finanzas Personales","Creado ${it.id}")
-         }.addOnFailureListener{
-             Log.d("Finanzas Personales","Ocurrio Error ${it}")
-         }
+        user["email"] = email.toString()
+        FirebaseFirestore.getInstance().collection("users")
+            .add(user)
+            .addOnSuccessListener {
+                Log.d("Finanzas Personales","Creado ${it.id}")
+            }.addOnFailureListener{
+                Log.d("Finanzas Personales","Ocurrio Error ${it}")
+            }
     }
 }
