@@ -55,10 +55,13 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.Ahorros.AhorrosScreen
+import com.example.proyectoplatzapplication.ui.Contactos.ContactInformation
+import com.example.proyectoplatzapplication.ui.Contactos.Greeting
 import com.example.proyectoplatzapplication.ui.ExpenseReport.ReporteGastos
 import com.example.proyectoplatzapplication.ui.Home.Home
 import com.example.proyectoplatzapplication.ui.Login.MainLogin
 import com.example.proyectoplatzapplication.ui.Reminders.ReminderApp
+import com.example.proyectoplatzapplication.ui.calculadora.Calculadora
 import com.example.proyectoplatzapplication.ui.registro.CrearPantallaRegistro
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 import kotlinx.coroutines.launch
@@ -199,6 +202,16 @@ fun DrawerExample(viewModel: NavigationFirebase = androidx.lifecycle.viewmodel.c
                         }
                         composable(route = "Ahorros"){
                             AhorrosScreen(navController = navController)
+                        }
+                        composable(route = "Contactos"){
+                            Greeting(navController = navController)
+                        }
+                        composable(route = "info/{idContact}"){
+                                backStackEntry -> ContactInformation(navController, id = backStackEntry.arguments?.getInt("idContact"))
+                        }
+                        composable(route = "Calculadora"){
+                            context.startActivity(Intent(context, Calculadora::class.java))
+                            Home(navController = navController)
                         }
                     }
                 }

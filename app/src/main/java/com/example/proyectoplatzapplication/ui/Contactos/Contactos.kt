@@ -65,30 +65,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 import java.io.Serializable
 
-class Contactos : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            ProyectoPlatzApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting()
-                }
-            }
-        }
-    }
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Greeting() {
+fun Greeting(navController: NavController) {
     Column {
         Row(
             modifier = Modifier
@@ -107,7 +94,7 @@ fun Greeting() {
         }
         Scaffold(content = { padding->Column(Modifier.padding(padding)) {
                 MainScreen()
-                ContactosList()
+                ContactosList(navController)
             }
         })
     }
@@ -115,32 +102,23 @@ fun Greeting() {
 }
 
 @Composable
-fun ContactosList() {
+fun ContactosList(navController: NavController) {
 
-    val listaDeContactos = listOf(
-        Contacto("Banco Azteca", R.drawable.bancoaztecaaa,"+502 2306 8000","Cdad.Guatemala", "7A Avenida 19-28", "Mixco", "6A Calle 4-36","Huehuetenango", "Calz Kaibil Balam" ),
-        Contacto("Banco Banrural", R.drawable.bancobanrural,"+502 2339 8888","Cdad.Guatemala", "Mercado La Villa de Guadalupe", "Guatemala", "7A Calle 6-23","Mixco", "11 calle 4-13"),
-        Contacto("Banco Industrial", R.drawable.bancobi,"+502 2411 6000","Cdad.Guatemala","Vista Hermosa, Carril Auxiliar","Guatemala", "9A Calle 2-42","Zacapa", "13 calle 5-12"),
-        Contacto("Banco G&T", R.drawable.bancog_t,"1718", "Cdad.Guatemala", "20 Cakke, 25-85 Zona 10 C.C La Pradera","Guatemala", "4A Calle 7-36","Antigua Guatemala", "12 calle 13 -55")
-    )
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
         items(listaDeContactos) { contacto ->
-            ContactoItem(contacto = contacto)
+            ContactoItem(contacto = contacto, navController = navController)
         }
     }
 }
 
 @Composable
-fun ContactoItem(contacto: Contacto) {
+fun ContactoItem(contacto: Contacto,navController: NavController) {
     val context = LocalContext.current
     Button(onClick = {
-
-        val intent = Intent(context,InformacionContactosActivity::class.java)
-        intent.putExtra("Contacto",contacto)
-        context.startActivity(intent)
+        navController.navigate("info/${contacto.id}")
     },
 
         Modifier
@@ -257,7 +235,6 @@ fun MainScreen(){
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    ProyectoPlatzApplicationTheme {
-        Greeting()
-    }
+    val navController = rememberNavController()
+    Greeting(navController)
 }

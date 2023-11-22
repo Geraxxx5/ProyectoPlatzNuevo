@@ -29,6 +29,12 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.ProyectoPlatzApplication">
         </activity>
+        <activity
+            android:name=".ui.calculadora.Calculadora"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ProyectoPlatzApplication">
+        </activity>
     </application>
 
 </manifest>

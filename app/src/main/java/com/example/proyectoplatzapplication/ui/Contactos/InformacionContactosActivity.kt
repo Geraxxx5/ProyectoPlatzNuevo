@@ -42,34 +42,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationTheme
 
 var contacto:Contacto? = null
 //var Sede:Contacto? = null
 
-class InformacionContactosActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        contacto = intent.getParcelableExtra<Contacto>("Contacto")
-        setContent {
-            ProyectoPlatzApplicationTheme {
-                // A surface container using the 'background' color from the theme
-                Column() {
-                    TopContactInfo()
-                    Spacer(modifier = Modifier.width(16.dp))
-                    ContentContactInfo()
-                }
-            }
-        }
-    }
-}
 
 @Composable
-fun ContactInformation() {
+fun ContactInformation(navController: NavController,id:Int?) {
+    contacto = listaDeContactos[id!!]
     Column {
-        TopContactInfo()
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.height(70.dp))
         ContentContactInfo()
     }
 }
@@ -82,7 +68,7 @@ fun TopContactInfo(){
         containerColor = Color(0xFFB6FC65)),
         navigationIcon = {
             IconButton(onClick = {
-                context.startActivity(Intent(context,Contactos::class.java))
+                //context.startActivity(Intent(context,Contactos::class.java))
             }) {
                 Icon(painter = painterResource(id = R.drawable.ic_arrow_back), contentDescription = "")
             }
@@ -178,7 +164,6 @@ fun ContentContactInfo(){
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ContactInformationPreview() {
-    ProyectoPlatzApplicationTheme {
-        ContactInformation()
-    }
+    val navController = rememberNavController()
+    ContactInformation(navController,1)
 }
