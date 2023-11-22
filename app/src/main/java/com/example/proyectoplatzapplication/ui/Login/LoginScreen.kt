@@ -3,6 +3,7 @@ package com.example.proyectoplatzapplication.ui.Login
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -80,25 +81,57 @@ fun LoginScreen(
                     Text(text = "Iniciar Sesión")
                     UserForm(isCreateAccount = false) { email, password ->
                         Log.d("Finanzas Personales", "Login con $email y $password")
-                        viewModel.signInWithEmailAndPassword(email, password) {
+                        if(email != "" && password != "") {
+                            if (password.length >= 7) {
+                                viewModel.signInWithEmailAndPassword(email, password) {
 
-                            // navController.navigate(Navigation/MainActivity)
-                            context.startActivity(Intent(context, MainActivity::class.java))
-                            activity?.finish()
-                            //navController.navigate("MainActivity")
+                                    // navController.navigate(Navigation/MainActivity)
+                                    context.startActivity(Intent(context, MainActivity::class.java))
+                                    activity?.finish()
+                                    //navController.navigate("MainActivity")
 
+                                }
+                            }else {
+                                Toast.makeText(
+                                    context,
+                                    "La contraseña tiene que tener 7 caracteres",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }else{
+                            Toast.makeText(
+                                context,
+                                "Los campos tienen que estar llenos",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 } else {
                     Text(text = "Crea una cuenta")
                     UserForm(isCreateAccount = true) { email, password ->
                         Log.d("Finanzas Personales", "Creando Cuenta con $email y $password")
-                        viewModel.createUserWithEmailAndPassword(email, password) {
+                        if(email != "" && password != "") {
+                            if (password.length >= 7) {
+                                viewModel.createUserWithEmailAndPassword(email, password) {
 
-                            // navController.navigate(Navigation/MainActivity)
-                            context.startActivity(Intent(context, MainActivity::class.java))
-                            activity?.finish()
+                                    // navController.navigate(Navigation/MainActivity)
+                                    context.startActivity(Intent(context, MainActivity::class.java))
+                                    activity?.finish()
 
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "La contraseña tiene que tener 7 caracteres",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }else{
+                            Toast.makeText(
+                                context,
+                                "Los campos tienen que estar llenos",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
