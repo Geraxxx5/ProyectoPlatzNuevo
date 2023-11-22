@@ -1,15 +1,20 @@
 package com.example.proyectoplatzapplication.ui.Reminders
 
 import android.app.DatePickerDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
@@ -18,6 +23,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -33,6 +39,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.proyectoplatzapplication.R
 import java.text.SimpleDateFormat
@@ -110,20 +118,43 @@ fun ReminderApp(navController: NavController) {
         //CustomDatePicker(selectedDate = selectedDate)
 
         if (showAddReminder.value) {
-            AddReminder(
-                onAddReminder = { reminder ->
-                    reminders.add(reminder)
-                    showAddReminder.value = false
-                },
-                onCancel = { showAddReminder.value = false },
-                selectedDate = selectedDate.value,
-                amount = amount.value,
-                reminderText = reminderText.value,
-                onDateSelected = { date -> selectedDate.value = date },
-                onAmountChanged = { newAmount -> amount.value = newAmount },
-                onReminderTextChanged = { newText -> reminderText.value = newText }
+            Dialog(
+                onDismissRequest = { showAddReminder.value = false },
+                content = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.Center)
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = Color.White,
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                AddReminder(
+                                    onAddReminder = { reminder ->
+                                        reminders.add(reminder)
+                                        showAddReminder.value = false
+                                    },
+                                    onCancel = { showAddReminder.value = false },
+                                    selectedDate = selectedDate.value,
+                                    amount = amount.value,
+                                    reminderText = reminderText.value,
+                                    onDateSelected = { date -> selectedDate.value = date },
+                                    onAmountChanged = { newAmount -> amount.value = newAmount },
+                                    onReminderTextChanged = { newText -> reminderText.value = newText }
+                                )
+                            }
+                        }
+                    }
+                }
             )
         }
+
 
         reminders.forEachIndexed { index, reminder ->
             Row(verticalAlignment = Alignment.CenterVertically) {
