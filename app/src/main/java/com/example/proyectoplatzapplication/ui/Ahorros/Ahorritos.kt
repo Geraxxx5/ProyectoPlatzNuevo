@@ -1,6 +1,7 @@
 package com.example.proyectoplatzapplication.ui.Ahorros
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.AlertDialog
@@ -25,6 +28,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,17 +47,32 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyectoplatzapplication.R
 import com.example.proyectoplatzapplication.ui.registro.CrearPantallaRegistro
+import com.example.proyectoplatzapplication.ui.registro.Gasto
+import com.example.proyectoplatzapplication.ui.registro.RegistroGastosViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AhorrosScreen(navController: NavController) {
+fun AhorrosScreen(navController: NavController, viewModel: AhorrosViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     var openDialog by remember { mutableStateOf(false) }
     var ahorros by remember { mutableStateOf(listOf<Ahorro>()) }
     var selectedAhorro by remember { mutableStateOf<Ahorro?>(null) }
 
+    LaunchedEffect(key1 = viewModel) {
+        val values = viewModel.obtainSavings()
+        withContext(Dispatchers.Main) {
+            for (i in values) {
+                Log.d("Ahorros", "Fecha: ${i.objective}")
+                ahorros = ahorros + Ahorro(i.objective!!,i.description!!,i.goal!!.toInt(),i.current!!.toInt())
+            }
+        }
+    }
+
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
+        Spacer(modifier = Modifier.height(70.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -92,9 +111,8 @@ fun AhorrosScreen(navController: NavController) {
             }
         }
         if (openDialog) {
-            NuevoAhorroDialog(onClose = { openDialog = false }) { nuevoAhorro ->
-                ahorros = ahorros + nuevoAhorro
-            }
+            NuevoAhorroDialog(onClose = { openDialog = false }, onAhorroCreated = {nuevoAhorro ->
+                ahorros = ahorros + nuevoAhorro},viewModel = viewModel)
         }
     }
 
@@ -104,13 +122,14 @@ fun AhorrosScreen(navController: NavController) {
             onAhorroUpdated = { updatedAhorro ->
                 ahorros = ahorros.map { if (it == ahorro) updatedAhorro else it }
             },
-            onBack = { selectedAhorro = null }
+            onBack = { selectedAhorro = null },
+            viewModel
         )
     }
 }
 
 @Composable
-fun NuevoAhorroDialog(onClose: () -> Unit, onAhorroCreated: (Ahorro) -> Unit) {
+fun NuevoAhorroDialog(onClose: () -> Unit, onAhorroCreated: (Ahorro) -> Unit, viewModel: AhorrosViewModel) {
     var objetivo by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
     var meta by remember { mutableStateOf("") }
@@ -135,6 +154,7 @@ fun NuevoAhorroDialog(onClose: () -> Unit, onAhorroCreated: (Ahorro) -> Unit) {
         confirmButton = {
             Button(onClick = {
                 onAhorroCreated(Ahorro(objetivo, descripcion, meta.toInt(), actual.toInt()))
+                viewModel.createNewSaving(Savings(objetivo,descripcion,meta,actual))
                 onClose()
             }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))) {
                 Text("Aceptar")
@@ -149,9 +169,11 @@ fun NuevoAhorroDialog(onClose: () -> Unit, onAhorroCreated: (Ahorro) -> Unit) {
 }
 
 @Composable
-fun AhorroDetails(ahorro: Ahorro, onAhorroUpdated: (Ahorro) -> Unit, onBack: () -> Unit) {
+fun AhorroDetails(ahorro: Ahorro, onAhorroUpdated: (Ahorro) -> Unit, onBack: () -> Unit,viewModel: AhorrosViewModel) {
     var adding by remember { mutableStateOf(false) }
     var amountToAdd by remember { mutableStateOf("") }
+    var currentAmount by remember { mutableStateOf("") }
+    currentAmount = ahorro.actual.toString()
 
     Box(
         modifier = Modifier
@@ -166,6 +188,12 @@ fun AhorroDetails(ahorro: Ahorro, onAhorroUpdated: (Ahorro) -> Unit, onBack: () 
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(text = "META: ${ahorro.meta}", style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontFamily = FontFamily.Serif,
+                fontSize = 25.sp
+            ))
             Text(text = "Objetivo: ${ahorro.objetivo}", style = TextStyle(
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -178,7 +206,7 @@ fun AhorroDetails(ahorro: Ahorro, onAhorroUpdated: (Ahorro) -> Unit, onBack: () 
                 fontFamily = FontFamily.Cursive,
                 fontSize = 20.sp
             ))
-            Text(text = "Actual: ${ahorro.actual}",style = TextStyle(
+            Text(text = "Actual: $currentAmount",style = TextStyle(
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 fontFamily = FontFamily.Serif,
@@ -205,6 +233,8 @@ fun AhorroDetails(ahorro: Ahorro, onAhorroUpdated: (Ahorro) -> Unit, onBack: () 
                                 actual = newAmount
                             )
                             onAhorroUpdated(updatedAhorro)
+                            viewModel.updateSavings(ahorro.objetivo,ahorro.meta.toString(),newAmount.toString())
+                            currentAmount = newAmount.toString()
                             adding = false
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD2FEA8))

@@ -98,134 +98,121 @@ fun CrearPantallaRegistro(navController: NavController, viewModel: RegistroGasto
             }
         }
     }
-
-
-    if(viewModel.expensesUiState.loading) {
-        Column(
-            modifier = Modifier.padding(16.dp)
+    Column(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        Spacer(modifier = Modifier.height(70.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Spacer(modifier = Modifier.height(70.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "REGISTRO DE GASTOS",
-                    modifier = Modifier.weight(2f),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF12950E),
-                        fontFamily = FontFamily.SansSerif,
-                        fontSize = 25.sp
+            Text(
+                text = "REGISTRO DE GASTOS",
+                modifier = Modifier.weight(2f),
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF12950E),
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 25.sp
 
-                    )
                 )
-                Box(
-                    modifier = Modifier.size(48.dp),
-                    contentAlignment = Alignment.Center
+            )
+            Box(
+                modifier = Modifier.size(48.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                IconButton(
+                    onClick = { showDialog = true }
                 ) {
-                    IconButton(
-                        onClick = { showDialog = true }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.addddd),
-                            contentDescription = "Agregar registro",
-                            modifier = Modifier
-                                .size(45.dp),
-                            tint = Color.Unspecified
-                        )
-                    }
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Fecha",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-
-                Text(
-                    text = "Categoría",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = "Descripción",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-                Text(
-                    text = "Gasto",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-            }
-
-            LazyColumn {
-                items(gastos) { gasto ->
-                    Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                        Text(text = gasto.fecha, modifier = Modifier.weight(1f))
-                        Text(text = gasto.categoria, modifier = Modifier.weight(1f))
-                        Text(text = gasto.descripcion, modifier = Modifier.weight(1f))
-                        Text(text = gasto.cantidadGastada, modifier = Modifier.weight(1f))
-                    }
-                }
-            }
-            Box(modifier = Modifier.fillMaxWidth().background(Color(0xFFD2FEA8))) {
-                Text(
-                    text = "Total gastado Q: ${calcularTotalGastado(gastos)}",
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 20.sp
+                    Icon(
+                        painter = painterResource(id = R.drawable.addddd),
+                        contentDescription = "Agregar registro",
+                        modifier = Modifier
+                            .size(45.dp),
+                        tint = Color.Unspecified
                     )
-
-                )
-            }
-
-            if (showDialog) {
-                AgregarGastoDialog(
-                    gastos = gastos,
-                    onDismiss = { showDialog = false },
-                    onAgregarGasto = {
-                        gastos.add(
-                            Gasto(
-                                fecha = it.fecha,
-                                categoria = it.categoria,
-                                descripcion = it.descripcion,
-                                cantidadGastada = it.cantidadGastada
-                            )
-                        )
-                        showDialog = false
-                    },
-                    viewModel
-                )
+                }
             }
         }
-    }else{
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.width(64.dp),
-                color = Color.LightGray
+            Text(
+                text = "Fecha",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
+                ),
+                modifier = Modifier.weight(1f)
+            )
+
+            Text(
+                text = "Categoría",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
+                ),
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Descripción",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
+                ),
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "Gasto",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 16.sp
+                ),
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        LazyColumn {
+            items(gastos) { gasto ->
+                Row(modifier = Modifier.padding(vertical = 8.dp)) {
+                    Text(text = gasto.fecha, modifier = Modifier.weight(1f))
+                    Text(text = gasto.categoria, modifier = Modifier.weight(1f))
+                    Text(text = gasto.descripcion, modifier = Modifier.weight(1f))
+                    Text(text = gasto.cantidadGastada, modifier = Modifier.weight(1f))
+                }
+            }
+        }
+        Box(modifier = Modifier.fillMaxWidth().background(Color(0xFFD2FEA8))) {
+            Text(
+                text = "Total gastado Q: ${calcularTotalGastado(gastos)}",
+                modifier = Modifier.padding(vertical = 16.dp),
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black, fontFamily = FontFamily.SansSerif, fontSize = 20.sp
+                )
+
+            )
+        }
+
+        if (showDialog) {
+            AgregarGastoDialog(
+                gastos = gastos,
+                onDismiss = { showDialog = false },
+                onAgregarGasto = {
+                    gastos.add(
+                        Gasto(
+                            fecha = it.fecha,
+                            categoria = it.categoria,
+                            descripcion = it.descripcion,
+                            cantidadGastada = it.cantidadGastada
+                        )
+                    )
+                    showDialog = false
+                },
+                viewModel
             )
         }
     }
+
 }
 
 

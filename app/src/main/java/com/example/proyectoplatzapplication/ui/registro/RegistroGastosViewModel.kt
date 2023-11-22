@@ -16,12 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-data class expenseUi(val expenses: List<Expense>,val loading:Boolean = true)
 class RegistroGastosViewModel: ViewModel()  {
     private val auth : FirebaseAuth = Firebase.auth
-    var expensesUiState by mutableStateOf(expenseUi(emptyList()))
-        private set
-
 
     suspend fun obtainExpenses(): MutableList<Expense> = withContext(Dispatchers.IO){
         val userId = auth.currentUser!!.uid
