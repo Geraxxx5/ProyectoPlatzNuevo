@@ -1,5 +1,7 @@
 package com.example.proyectoplatzapplication.ui.Home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,6 +25,7 @@ class HomeViewModel: ViewModel() {
     var HomeUiState by mutableStateOf(HomeUi(emptyList()))
         private set
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getDatatoShow(){
         HomeUiState = HomeUi(emptyList(),false)
         //val categorias = listOf("Comida", "Deudas", "Emergencia", "Uso Personal")
@@ -35,6 +38,7 @@ class HomeViewModel: ViewModel() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getSumOfExpensesByCategoryToday(category: String): Double {
         val userId = auth.currentUser!!.uid
         val usersRef = FirebaseFirestore.getInstance().collection("users")

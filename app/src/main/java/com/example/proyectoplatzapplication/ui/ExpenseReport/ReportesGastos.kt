@@ -1,6 +1,8 @@
 package com.example.proyectoplatzapplication.ui.ExpenseReport
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +34,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +56,7 @@ fun calculateTotalOf( index:String,gastos: SnapshotStateList<Gasto>): Int{
     }
     return contTemp
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReporteGastos(navController: NavController, viewModel: ReporteGastosViewModel = androidx.lifecycle.viewmodel.compose.viewModel()){
     val gastos = remember { mutableStateListOf<Gasto>() }
@@ -90,11 +96,15 @@ fun ReporteGastos(navController: NavController, viewModel: ReporteGastosViewMode
         Spacer(modifier = Modifier.height(70.dp))
         Divider()
         Text(
-            text = "REPORTES DE GASTOS",
-            modifier = Modifier.fillMaxWidth(),
+            text = "REPORTE DE GASTOS", modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
-            fontSize = 20.sp
-        )
+            style = TextStyle(
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF12950E),
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 20.sp
+
+            ))
         Text(
             text = "GASTOS SEMANALES",
             modifier = Modifier.fillMaxWidth(),
@@ -137,7 +147,7 @@ fun ReporteGastos(navController: NavController, viewModel: ReporteGastosViewMode
         Text(text = "Distribucion de gastos", Modifier.fillMaxWidth(), textAlign = TextAlign.End)
         Divider()
         val barWidth = 30f
-        val barColor = Color.Blue
+        val barColor = Color(0xFF12950E)
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Surface(
                 shape = RoundedCornerShape(8.dp),
@@ -174,6 +184,7 @@ fun ReporteGastos(navController: NavController, viewModel: ReporteGastosViewMode
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true)
 @Composable
 fun ReportesPreview(){

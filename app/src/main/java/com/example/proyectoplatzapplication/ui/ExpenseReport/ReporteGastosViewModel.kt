@@ -1,6 +1,8 @@
 package com.example.proyectoplatzapplication.ui.ExpenseReport
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.proyectoplatzapplication.ui.registro.Expense
 import com.google.firebase.auth.FirebaseAuth
@@ -63,6 +65,7 @@ class ReporteGastosViewModel: ViewModel() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getExpensePercentages(): MutableMap<String, Double> {
         val userId = auth.currentUser!!.uid
         val usersRef = FirebaseFirestore.getInstance().collection("users")

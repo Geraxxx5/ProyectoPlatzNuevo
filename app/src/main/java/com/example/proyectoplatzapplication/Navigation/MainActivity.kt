@@ -3,9 +3,11 @@ package com.example.proyectoplatzapplication.Navigation
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -67,6 +69,7 @@ import com.example.proyectoplatzapplication.ui.theme.ProyectoPlatzApplicationThe
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -83,6 +86,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +113,7 @@ fun DrawerExample(viewModel: NavigationFirebase = androidx.lifecycle.viewmodel.c
                         contentAlignment = Alignment.Center
                     ) {
                         AsyncImage(
-                            model = "https://assets.metrolatam.com/cl/2015/11/09/captura-de-pantalla-2015-11-09-a-las-09-20-49-1-1200x800.jpg",
+                            model = "https://cdn.icon-icons.com/icons2/2030/PNG/512/user_icon_124042.png",
                             contentDescription = "",
                             Modifier
                                 .size(100.dp)
@@ -230,6 +234,7 @@ fun DrawerExample(viewModel: NavigationFirebase = androidx.lifecycle.viewmodel.c
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
